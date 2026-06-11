@@ -1,0 +1,188 @@
+#include <iostream>
+using namespace std;
+
+class DynIntQueue{
+private:
+    struct QueueNode {
+        int value;
+        QueueNode* next;
+    };
+
+    QueueNode* front;
+    QueueNode* rear;
+    int numItems;
+
+public:
+    DynIntQueue();
+    ~DynIntQueue();
+    void enqueue(int);
+    void dequeue(int &);
+    bool isEmpty();
+    void clear();
+};
+
+
+class Queue {
+private:
+    struct Node {
+        int data;
+        Node* next;
+    };
+
+    Node* front;
+    Node* rear;
+    int size;
+
+public:
+    Queue();
+    ~Queue();
+
+    bool isEmpty();
+    void enqueue(int value);
+    int dequeue();
+    int getFront();
+    int getSize();
+
+    void displayQueue();
+    void displayAddresses();
+};
+
+Queue::Queue() {
+    front = NULL;
+    rear = NULL;
+    size = 0;
+}
+
+Queue::~Queue() {
+    while (!isEmpty()) {
+        dequeue();
+    }
+}
+
+bool Queue::isEmpty() {
+    return size == 0;
+}
+
+void Queue::enqueue(int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (isEmpty()) {
+        front = rear = newNode;
+    } else {
+        rear->next = newNode;
+        rear = newNode;
+    }
+
+    size++;
+}
+
+int Queue::dequeue() {
+    if (isEmpty()) {
+        cout << "Error: Queue is empty!" << endl;
+        return -1;
+    }
+
+    Node* temp = front;
+    int value = front->data;
+
+    front = front->next;
+    delete temp;
+
+    size--;
+
+    if (front == NULL) {
+        rear = NULL;
+    }
+
+    return value;
+}
+
+int Queue::getFront() {
+    if (isEmpty()) {
+        cout << "Error: Queue is empty!" << endl;
+        return -1;
+    }
+
+    return front->data;
+}
+
+int Queue::getSize() {
+    return size;
+}
+
+void Queue::displayQueue() {
+    if (isEmpty()) {
+        cout << "Queue is empty." << endl;
+        return;
+    }
+
+    cout << "Current Queue: ";
+
+    Node* current = front;
+
+    while (current != NULL) {
+        cout << current->data;
+
+        if (current->next != NULL)
+            cout << ", ";
+
+        current = current->next;
+    }
+
+    cout << endl;
+}
+
+void Queue::displayAddresses()
+{
+    Node* current = front;
+
+    while (current != NULL)
+    {
+        cout << current << " -> "
+             << current->next << endl;
+        current = current->next;
+    }
+}
+
+
+
+    int main()
+    {
+        Queue q;
+        // Enqueue 5, 10, 15, 20
+        for (int x = 1; x < 5; x++)
+        {
+            q.enqueue(x * 5);
+        }
+        q.displayQueue();
+        cout << "Front element: " << q.getFront() << endl;
+        
+        //first dequeue
+        q.dequeue();
+        cout << "\n-------- First Dequeue --------"<< endl;
+        cout << "\nAfter Dequeue Operations:"<< endl;
+        q.displayQueue();
+        cout << "Front element: " << q.getFront() << endl;
+        
+        //second?
+        q.dequeue();
+        cout << "\n-------- Second Dequeue --------"<< endl;
+        cout << "\nAfter Dequeue Operations:"<< endl;
+        q.displayQueue();
+        cout << "Front element: " << q.getFront() << endl;
+        
+        // Dequeue and display the items in the queue 
+        cout << "\n--------------------------------"<< endl;
+        
+        while (!q.isEmpty())
+            {
+                int value;
+                q.dequeue();
+                cout << "Status: ";
+                q.displayQueue();
+            }
+            
+        return 0;
+}
